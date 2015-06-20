@@ -59,6 +59,7 @@ if (J_linear <= J_quadratic) && (J_linear <= J_cubic)
 	xbins = [((floor(min(x)/xstep))*xstep):xstep:((ceil(max(x)/xstep))*xstep)]';
 	ybins = [ones(size(xbins,1),1) xbins] * theta11;
 	plot(xbins, ybins);
+	theta = theta11;
 	
 elseif (J_quadratic <= J_cubic)
 	theta = theta2;
@@ -78,6 +79,7 @@ elseif (J_quadratic <= J_cubic)
 	xbins = [((floor(min(x)/xstep))*xstep):xstep:((ceil(max(x)/xstep))*xstep)]';
 	ybins = [ones(size(xbins,1),1) xbins xbins.*xbins] * theta22;
 	plot(xbins, ybins);
+	theta = theta22;
 else
 	theta = theta3;
 	str = ['The best model is Cubic Model, and the Test Error is ', num2str(J_cubic), '. The Model is y = ', num2str(theta(1)), ' + ', num2str(theta(2)), ' * x + ', num2str(theta(3)), ' * x^2 + ', num2str(theta(4)), ' * x^3. J_Linear is: ', num2str(J_linear), '. J_Quadratic is: ', num2str(J_quadratic)];
@@ -96,6 +98,7 @@ else
 	xbins = [((floor(min(x)/xstep))*xstep):xstep:((ceil(max(x)/xstep))*xstep)]';
 	ybins = [ones(size(xbins,1),1) xbins xbins.*xbins xbins.*xbins.*xbins] * theta33;
 	plot(xbins, ybins);
+	theta = theta33;
 end
 
 end
