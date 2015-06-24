@@ -28,7 +28,7 @@ for i=1:m2-1,
 		t = TAcc(j+1) - TAcc(j);
 		f = 1 / t;
 		j = j+1;
-		if (VGPS(i) > 2 | VGPS(i) < 1)
+		if (VGPS(i) > 3)
 			break;
 		else
 			V = [V; VGPS(i)];
