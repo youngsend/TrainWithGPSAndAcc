@@ -1,0 +1,1 @@
+Guang walks with a black Galaxy Nexus.

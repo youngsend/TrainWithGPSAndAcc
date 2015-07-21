@@ -1,0 +1,1 @@
+Jingmei walks with Nexus 5. They may contain both 128Hz and 200Hz...FUCK.

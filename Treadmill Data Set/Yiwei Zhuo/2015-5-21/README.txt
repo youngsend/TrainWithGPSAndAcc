@@ -1,0 +1,1 @@
+Yiwei walks with the black Galaxy Nexus. From 3.5 to 7.5km/h.

@@ -1,0 +1,1 @@
+Jingmei walks with Nexus 4 from 3.1 to 6.9km/h.

@@ -1,0 +1,1 @@
+Hua walks with a black Galaxy Nexus.

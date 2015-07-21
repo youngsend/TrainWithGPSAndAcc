@@ -1,0 +1,1 @@
+Sen walks with black Galaxy Nexus.
