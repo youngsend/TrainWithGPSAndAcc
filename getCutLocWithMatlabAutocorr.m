@@ -6,48 +6,55 @@ i = 1;
 sample_rate = 199; % We only use Nexus 4 for collecting GPS data
 sequence_time = 2; % a segment duration 2 seconds
 len_sequence = floor(sample_rate * sequence_time);
-while (i + len_sequence - 1) <= m
-	sequence = Acc(i:i+len_sequence-1);
-	auto_corr_compute = autocorr(sequence, len_sequence-1);
+
+interval_left = floor((sample_rate) * 0.357);
+interval_right = floor(sample_rate * 0.714);
+
+while ((i + len_sequence - 1) <= m)   
+    sequence = Acc(i:i+len_sequence-1);
+    auto_corr_compute = autocorr(sequence, len_sequence-1);
 
 %%%%%%%% How to eliminate the outliers?? I say it's very hard for a man to walk less than 1Hz or more than 3Hz (steps per second). Which means I only need lag for (sample_rate/3, sample_rate) to see the max auto corr.
-	interval_left = floor((sample_rate) * 0.31);
-	interval_right = floor(sample_rate);
+	
 	[pks, locs] = findpeaks(auto_corr_compute); 
 
 %%%%%%%% Then I only choose one-step frequency rather than two-step frequency!
-	n = size(pks,1);
-	j = n;
-	while(locs(j) >= interval_right)
-		pks(j) = 0;
-		j = j - 1;
-	end
-	j = 1;
-	while(locs(j) <= interval_left)
-		pks(j) = 0;
-		j = j + 1;
-	end
+    
+    k = find(locs>=interval_left & locs<=interval_right);
+    locs = locs(k);
+    pks = pks(k);
 	
 	[M, MI] = max(pks);
-	if ((MI == j) || (locs(MI-1) <= interval_left))
-		best_lag = locs(MI);
-	else
-		MMI = MI - 1;
-		while((locs(MI) - locs(MMI) <= interval_left) && (MMI >= j))
-			MMI = MMI - 1;
-			if (MMI == j - 1)
-				MMI = MI;
-				break;
-			end
-		end
-		best_lag = locs(MMI);
-	end
-
+    
+    best_lag = locs(MI);
+            
+    %interval_left = best_lag - 10;
+    %interval_right = best_lag + 10;
+    
 %%%%%%%%
 	CutLoc = [CutLoc; best_lag - 1]; % for example, i = 1, Lag = 40, then I cut before i = 41, which means the slots number is 40!!! I use best_lag - 1, because the index of auto_corr_compute starts from 1.
 	i = i + best_lag - 1;
 end
 
+while (i < m)
+    remains = Acc(i:end);
+    auto_corr_compute = autocorr(remains, size(remains,1)-1);
+    [pks, locs] = findpeaks(auto_corr_compute);
+    
+    k = find(locs>=interval_left & locs<=interval_right);
+    locs = locs(k);
+    pks = pks(k);
+	
+	[M, MI] = max(pks);
+    
+    best_lag = locs(MI);
+            
+    interval_left = best_lag - 10;
+    interval_right = best_lag + 10;
+    
+    CutLoc = [CutLoc; best_lag-1];
+    i = i + best_lag - 1;
+end
 
 n = size(CutLoc, 1);
 F = [];
